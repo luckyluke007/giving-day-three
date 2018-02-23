@@ -81,7 +81,7 @@
 
 				// Camera params : 
 				// field of view, aspect ratio for render output, near and far clipping plane. 
-				camera = new THREE.PerspectiveCamera(90, w / h, 4, 10000);
+				camera = new THREE.PerspectiveCamera(40, w / h, 4, 5000);
 	
 				// move the camera backwards so we can see stuff! 
 				// default position is 0,0,0. 
@@ -100,7 +100,7 @@
 				makeParticles(); 
 				
 			
-				setInterval(update,8000/180);
+				setInterval(update,3000/120);
 
 				window.addEventListener( 'resize', onWindowResize, false );
 			
@@ -117,13 +117,15 @@
 			    camera.updateProjectionMatrix();
 			}
 
+
+
+
 			// the main update function, called 30 times a second
 
 			function update() {
 
 				
 				updateParticles();
-
 
 				// and render the scene from the perspective of the camera
 				renderer.render( scene, camera );
@@ -138,11 +140,9 @@
 
 				var PI2 = Math.PI * 2;
 
-				var particleCount = 200;
-
 				// we're gonna move from z position -1000 (far away) 
 				// to 1000 (where the camera is) and add a random particle at every pos. 
-				for ( var zpos = -1000; zpos < particleCount; zpos++ ) {
+				for ( var zpos= -1000; zpos < 1000; zpos+=40 ) {
 		
 					// we make a particle material and pass through the 
 					// colour and custom particle render function we defined. 
@@ -154,7 +154,6 @@
 							context.fill();
 						}
 					} );
-
 
 					// make the particle
 					particle = new THREE.Sprite(material);
@@ -168,7 +167,7 @@
 					particle.position.z = zpos;
 		
 					// scale it up a bit
-					particle.scale.x = particle.scale.y = 13;
+					particle.scale.x = particle.scale.y = 30;
 		
 					// add it to the scene
 					scene.add( particle );
@@ -196,10 +195,10 @@
 					particle.position.z +=  24 * .5;
 		
 					// if the particle is too close move it to the back
-					if(particle.position.z> 1500) particle.position.z-= Math.random() * 3000; 
+					if(particle.position.z>1500) particle.position.z-=3000; 
 		
 				}
-					
+	
 			}
 		
 
