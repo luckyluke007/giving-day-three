@@ -16,7 +16,7 @@
 			}
 
 			#canvas {
-				background: #000;
+				background: #fff;
 				border: 3px solid #000;
 				height: 100%;
 				margin: 0 auto;
@@ -27,6 +27,7 @@
 			}
 
 			canvas {
+				background: #fff;
 				display: inline-block;
 				height: 348px;
 				max-width: 1080px;
@@ -158,7 +159,7 @@
 					} );
 
 					// make the particle
-					particle = new THREE.Particle(material);
+					particle = new THREE.Sprite(material);
 		
 					// give it a random x and y position between -500 and 500
 					particle.position.x = Math.random() * 1000 - 500;
