@@ -17,7 +17,6 @@
 
 			#canvas {
 				background: #fff;
-				border: 3px solid #000;
 				height: 100%;
 				margin: 0 auto;
 				max-height: 348px;
@@ -27,7 +26,6 @@
 			}
 
 			canvas {
-				background: #fff;
 				display: inline-block;
 				height: 348px;
 				max-width: 1080px;
@@ -75,6 +73,7 @@
 			function init() {
 
 				renderer = new THREE.CanvasRenderer();
+				renderer.setClearColor( 0x93c03e, 1 );
 				var container = document.getElementById("canvas");
 				var w = container.offsetWidth;
         var h = container.offsetHeight;
@@ -88,6 +87,8 @@
 				// move the camera backwards so we can see stuff! 
 				// default position is 0,0,0. 
 				camera.position.z = 1000;
+
+				particleCount = 20000;
 
 				// the scene contains all the 3D object data
 				scene = new THREE.Scene();
@@ -151,11 +152,11 @@
 					// colour and custom particle render function we defined. 
 					material = new THREE.SpriteCanvasMaterial( { 
 						color: Math.random() * 0xf5851f, 
-						program: function ( context ) {
-						context.beginPath();
-						context.arc( 0, 0, 0.5, 0, PI2, true );
-						context.fill();
-					}
+							program: function ( context ) {
+							context.beginPath();
+							context.arc( 0, 0, 0.5, 0, PI2, true );
+							context.fill();
+						}
 					} );
 
 					// make the particle
