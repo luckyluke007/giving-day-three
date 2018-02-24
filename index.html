@@ -26,6 +26,7 @@
 			}
 
 			canvas {
+				background: #93c03e;
 				display: inline-block;
 				height: 348px;
 				max-width: 1080px;
@@ -89,6 +90,7 @@
 
 				// the scene contains all the 3D object data
 				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0x93c03e );
 
 				
 				// camera needs to go in the scene 
@@ -112,7 +114,6 @@
 			    var container = document.getElementById("canvas");
 					var w = container.offsetWidth;
         	var h = container.offsetHeight;
-        	renderer.setClearColor( 0x93c03e, 1 );
 			    renderer.setSize(w, h);
 			    camera.aspect = w / h;
 			    camera.updateProjectionMatrix();
@@ -124,6 +125,8 @@
 
 				
 				updateParticles();
+
+
 
 
 				// and render the scene from the perspective of the camera
@@ -139,11 +142,11 @@
 
 				var PI2 = Math.PI * 2;
 
-				var particleCount = 200;
+				var particleCount = 10;
 
 				// we're gonna move from z position -1000 (far away) 
 				// to 1000 (where the camera is) and add a random particle at every pos. 
-				for ( var zpos = -1000; zpos < particleCount; zpos++ ) {
+				for ( var zpos = -500; zpos < particleCount; zpos++ ) {
 		
 					// we make a particle material and pass through the 
 					// colour and custom particle render function we defined. 
