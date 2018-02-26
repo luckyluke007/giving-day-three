@@ -58,150 +58,128 @@
 
 		<script>
 
-			
-
 			// the main three.js components
-			var camera, scene, renderer,
+			var camera,
+			   scene,
+			   renderer,
+			   // an array to store our particles in
+			   particles = [];
 
-			// an array to store our particles in
-				particles = [];
-
-			// let's get going! 
+			// let's get going!
 			init();
 
 			function init() {
+			   renderer = new THREE.CanvasRenderer({
+			      alpha: true
+			   });
+			   
+			   renderer.setClearColor(0x93c03e, 1);
+			   var container = document.getElementById("canvas");
+			   var w = container.offsetWidth;
+			   var h = container.offsetHeight;
+			   renderer.setSize(w, h);
+			   container.appendChild(renderer.domElement);
 
-				renderer = new THREE.CanvasRenderer();
-				renderer.setClearColor( 0x93c03e, 1 );
-				var container = document.getElementById("canvas");
-				var w = container.offsetWidth;
-        var h = container.offsetHeight;
-        renderer.setSize(w, h);
-        container.appendChild( renderer.domElement );
+			   // Camera params :
+			   // field of view, aspect ratio for render output, near and far clipping plane.
+			   camera = new THREE.PerspectiveCamera(90, w / h, 4, 1000);
 
-				// Camera params : 
-				// field of view, aspect ratio for render output, near and far clipping plane. 
-				camera = new THREE.PerspectiveCamera(90, w / h, 4, 10000);
-	
-				// move the camera backwards so we can see stuff! 
-				// default position is 0,0,0. 
-				camera.position.z = 1000;
+			   // move the camera backwards so we can see stuff!
+			   // default position is 0,0,0.
+			   camera.position.z = 1000;
 
-				// the scene contains all the 3D object data
-				scene = new THREE.Scene();
+			   // the scene contains all the 3D object data
+			   scene = new THREE.Scene();
 
-				
-				// camera needs to go in the scene 
-				scene.add(camera);
-	
-				// and the CanvasRenderer figures out what the 
-				// stuff in the scene looks like and draws it!
+			   // camera needs to go in the scene
+			   scene.add(camera);
 
-				makeParticles(); 
-				
-			
-				setInterval(update,8000/180);
+			   makeParticles();
 
-				window.addEventListener( 'resize', onWindowResize, false );
-			
+			   setInterval(update, 40);
+
+			   window.addEventListener("resize", onWindowResize, false);
 			}
 
-			
-			
 			function onWindowResize(event) {
-			    var container = document.getElementById("canvas");
-					var w = container.offsetWidth;
-        	var h = container.offsetHeight;
-        	renderer.setClearColor( 0x93c03e, 1 );
-			    renderer.setSize(w, h);
-			    camera.aspect = w / h;
-			    camera.updateProjectionMatrix();
+			   var container = document.getElementById("canvas");
+			   var w = container.offsetWidth;
+			   var h = container.offsetHeight;
+			   renderer.setSize(w, h);
+			   camera.aspect = w / h;
+			   camera.updateProjectionMatrix();
 			}
 
 			// the main update function, called 30 times a second
 
 			function update() {
+			   
+			   window.requestAnimationFrame(updateParticles);
 
-				
-				updateParticles();
-
-
-				// and render the scene from the perspective of the camera
-				renderer.render( scene, camera );
-
+			   // and render the scene from the perspective of the camera
+			   renderer.render(scene, camera);
 			}
 
 			// creates a random field of Particle objects
-			
-			function makeParticles() { 
-				
-				var particle, material; 
 
-				var PI2 = Math.PI * 2;
+			function makeParticles() {
+			   
+			   var particle, material;
+			   var PI2 = Math.PI * 2;
+			   var particleCount = 210;
 
-				var particleCount = 200;
+			   // we're gonna move from z position -1000 (far away)
+			   // to 1000 (where the camera is) and add a random particle at every pos.
+			   for (var zpos = particleCount * -1; zpos < particleCount; zpos++) {
+			      // we make a particle material and pass through the
+			      // colour and custom particle render function we defined.
+			      material = new THREE.SpriteCanvasMaterial({
+			         color: Math.random() * 0xf5851f,
+			         program: function(context) {
+			            context.beginPath();
+			            context.arc(0, 0, .55, 0, PI2, true);
+			            context.fill();
+			         }
+			      });
 
-				// we're gonna move from z position -1000 (far away) 
-				// to 1000 (where the camera is) and add a random particle at every pos. 
-				for ( var zpos = -1000; zpos < particleCount; zpos++ ) {
-		
-					// we make a particle material and pass through the 
-					// colour and custom particle render function we defined. 
-					material = new THREE.SpriteCanvasMaterial( { 
-						color: Math.random() * 0xf5851f, 
-							program: function ( context ) {
-							context.beginPath();
-							context.arc( 0, 0, 0.5, 0, PI2, true );
-							context.fill();
-						}
-					} );
+			      // make the particle
+			      particle = new THREE.Sprite(material);
 
+			      // give it a random x and y position between -500 and 500
+			      particle.position.x = Math.random() * 1000 - 500;
+			      particle.position.y = Math.random() * 1000 - 500;
 
-					// make the particle
-					particle = new THREE.Sprite(material);
-		
-					// give it a random x and y position between -500 and 500
-					particle.position.x = Math.random() * 1000 - 500;
-					particle.position.y = Math.random() * 1000 - 500;
+			      // set its z position
+			      particle.position.z = zpos;
 
-		
-					// set its z position
-					particle.position.z = zpos;
-		
-					// scale it up a bit
-					particle.scale.x = particle.scale.y = 13;
-		
-					// add it to the scene
-					scene.add( particle );
-		
-					// and to the array of particles. 
-					particles.push(particle); 
-				}
-				
+			      // scale it up a bit
+			      particle.scale.x = particle.scale.y = 12;
+
+			      // add it to the scene
+			      scene.add(particle);
+
+			      // and to the array of particles.
+			      particles.push(particle);
+			   }
 			}
-			
-			// there isn't a built in circle particle renderer 
-			// so we have to define our own. 
 
-			
-			// moves all the particles dependent on mouse position
-			
-			function updateParticles() { 
-				
-				// iterate through every particle
-				for(var i=0; i<particles.length; i++) {
-		
-					particle = particles[i]; 
-		
-					// and move it forward dependent on the mouseY position. 
-					particle.position.z +=  24 * .5;
-		
-					// if the particle is too close move it to the back
-					if(particle.position.z> 1500) particle.position.z-= Math.random() * 3000; 
-		
-				}
-					
+			function updateParticles() {
+			   
+			   // iterate through every particle
+			   for (var i = 0; i < particles.length; i++) {
+			      particle = particles[i];
+
+			      // and move it forward
+			      particle.position.z += 24 * 0.45;
+
+			      // Once the particle passes beyond
+			      // the viewport, move it back behind the logo
+			      if (particle.position.z > 1100)
+			         particle.position.z -= Math.random() * 1080;
+			   }
 			}
+				
+
 		
 
 		</script>
