@@ -26,12 +26,8 @@
 			}
 
 			canvas {
-<<<<<<< HEAD
-				background: #93c03e;
-=======
 				/*background: #93c03e;*/
         background-image: radial-gradient(#c8e494,#93c03e);
->>>>>>> master
 				display: inline-block;
 				height: 348px;
 				max-width: 1080px;
@@ -79,48 +75,16 @@
 			      alpha: true
 			   });
 			   
-<<<<<<< HEAD
-			   renderer.setClearColor(0x93c03e, 1);
-=======
 			   //renderer.setClearColor(0x93c03e, 1);
->>>>>>> master
 			   var container = document.getElementById("canvas");
 			   var w = container.offsetWidth;
 			   var h = container.offsetHeight;
 			   renderer.setSize(w, h);
 			   container.appendChild(renderer.domElement);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-				renderer = new THREE.CanvasRenderer();
-				renderer.setClearColor( 0x93c03e, 1 );
-				var container = document.getElementById("canvas");
-				var w = container.offsetWidth;
-        var h = container.offsetHeight;
-        renderer.setSize(w, h);
-        container.appendChild( renderer.domElement );
-
-				// Camera params : 
-				// field of view, aspect ratio for render output, near and far clipping plane. 
-				camera = new THREE.PerspectiveCamera(90, w / h, 4, 10000);
-	
-				// move the camera backwards so we can see stuff! 
-				// default position is 0,0,0. 
-				camera.position.z = 1000;
-
-				// the scene contains all the 3D object data
-				scene = new THREE.Scene();
-				scene.background = new THREE.Color( 0x93c03e );
-=======
 			   // Camera params :
 			   // field of view, aspect ratio for render output, near and far clipping plane.
 			   camera = new THREE.PerspectiveCamera(90, w / h, 4, 1000);
->>>>>>> master
-=======
-			   // Camera params :
-			   // field of view, aspect ratio for render output, near and far clipping plane.
-			   camera = new THREE.PerspectiveCamera(90, w / h, 4, 1000);
->>>>>>> master
 
 			   // move the camera backwards so we can see stuff!
 			   // default position is 0,0,0.
@@ -128,7 +92,6 @@
 
 			   // the scene contains all the 3D object data
 			   scene = new THREE.Scene();
-<<<<<<< HEAD
 
 			   // camera needs to go in the scene
 			   scene.add(camera);
@@ -137,41 +100,16 @@
 
 			   setInterval(update, 40);
 
-=======
-
-			   // camera needs to go in the scene
-			   scene.add(camera);
-
-			   makeParticles();
-
-			   setInterval(update, 40);
-
->>>>>>> master
 			   window.addEventListener("resize", onWindowResize, false);
 			}
 
 			function onWindowResize(event) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-			    var container = document.getElementById("canvas");
-					var w = container.offsetWidth;
-        	var h = container.offsetHeight;
-			    renderer.setSize(w, h);
-			    camera.aspect = w / h;
-			    camera.updateProjectionMatrix();
-=======
-=======
->>>>>>> master
 			   var container = document.getElementById("canvas");
 			   var w = container.offsetWidth;
 			   var h = container.offsetHeight;
 			   renderer.setSize(w, h);
 			   camera.aspect = w / h;
 			   camera.updateProjectionMatrix();
-<<<<<<< HEAD
->>>>>>> master
-=======
->>>>>>> master
 			}
 
 			// the main update function, called 30 times a second
@@ -180,25 +118,8 @@
 			   
 			   window.requestAnimationFrame(updateParticles);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-				
-				updateParticles();
-
-
-
-
-				// and render the scene from the perspective of the camera
-				renderer.render( scene, camera );
-
-=======
 			   // and render the scene from the perspective of the camera
 			   renderer.render(scene, camera);
->>>>>>> master
-=======
-			   // and render the scene from the perspective of the camera
-			   renderer.render(scene, camera);
->>>>>>> master
 			}
 
 			// creates a random field of Particle objects
@@ -244,33 +165,6 @@
 			   }
 			}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-				var particleCount = 10;
-
-				// we're gonna move from z position -1000 (far away) 
-				// to 1000 (where the camera is) and add a random particle at every pos. 
-				for ( var zpos = -500; zpos < particleCount; zpos++ ) {
-		
-					// we make a particle material and pass through the 
-					// colour and custom particle render function we defined. 
-					material = new THREE.SpriteCanvasMaterial( { 
-						color: Math.random() * 0xf5851f, 
-							program: function ( context ) {
-							context.beginPath();
-							context.arc( 0, 0, 0.5, 0, PI2, true );
-							context.fill();
-						}
-					} );
-
-
-					// make the particle
-					particle = new THREE.Sprite(material);
-		
-					// give it a random x and y position between -500 and 500
-					particle.position.x = Math.random() * 1000 - 500;
-					particle.position.y = Math.random() * 1000 - 500;
-=======
 			function updateParticles() {
 			   
 			   // iterate through every particle
@@ -279,17 +173,6 @@
 
 			      // and move it forward
 			      particle.position.z += 24 * 0.45;
->>>>>>> master
-=======
-			function updateParticles() {
-			   
-			   // iterate through every particle
-			   for (var i = 0; i < particles.length; i++) {
-			      particle = particles[i];
-
-			      // and move it forward
-			      particle.position.z += 24 * 0.45;
->>>>>>> master
 
 			      // Once the particle passes beyond
 			      // the viewport, move it back behind the logo
