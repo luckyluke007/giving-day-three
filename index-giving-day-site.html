@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Givin Day Billboard Test</title>
+		<meta charset="utf-8">
+		<meta content="width=device-width, user-scalable=yes, initial-scale=1.0, minimum-scale=1.0, maximum-scale=2.0" name="viewport">
+		<link href="//www.ucsc.edu/favicon.ico" rel="shortcut icon">
+
+		<style type="text/css">
+			body,
+			html {
+				background-color: #fff;
+				margin: 0px;
+				width: 100%;
+				height: 100%;
+			}
+
+			.canvas-container {
+				background: #93c03e;
+				display: inline-block;
+				height: 500px;
+				position: relative;
+				width: 100%;
+			}
+
+			#canvas {
+				/*background-color: #93c03e;*/           
+				height: 100%;
+				margin: 0 auto;
+				max-height: 500px;
+				max-width: 100%;
+				overflow: hidden;
+				padding: 0;
+				position: relative;
+			}
+
+			canvas {
+				background: #93c03e;
+        /*background-image: radial-gradient(#c8e494,#93c03e);*/
+				display: inline-block;
+				height: 100%;
+				max-width: 100%;
+			}
+
+			.canvas-container img {
+				bottom: 0;
+				left: 0;
+				margin: auto;
+				padding: 0;
+				position: absolute;
+				right: 0;
+				top: 0;
+				width: 225px;
+				z-index: 100;
+			}
+
+		</style>
+		
+	</head>
+	<body>
+		<a href="https://givingday.ucsc.edu">
+			<div class="canvas-container">
+				<img src="https://www.ucsc.edu/images/giving-day/gd-logo.png" alt="2.28.18 Giving Day UC Santa Cruz">
+				<div id="canvas">
+					
+				</div>
+			</div>
+		</a>
+
+		<script src="js/three-v90.js"></script>
+		<script src="js/CanvasRenderer.js"></script>
+		<script src="js/Projector.js"></script>
+
+		<script>
+
+			// the main three.js components
+			var camera,
+			   scene,
+			   renderer,
+			   // an array to store our particles in
+			   particles = [];
+
+			// let's get going!
+			init();
+
+			function init() {
+			   renderer = new THREE.CanvasRenderer({
+			      alpha: true
+			   });
+			   
+			   //renderer.setClearColor(0x93c03e, 1);
+			   var container = document.getElementById("canvas");
+			   var w = container.offsetWidth;
+			   var h = container.offsetHeight;
+			   renderer.setSize(w, h);
+			   container.appendChild(renderer.domElement);
+
+			   // Camera params :
+			   // field of view, aspect ratio for render output, near and far clipping plane.
+			   camera = new THREE.PerspectiveCamera(90, w / h, 4, 1000);
+
+			   // move the camera backwards so we can see stuff!
+			   // default position is 0,0,0.
+			   camera.position.z = 1000;
+
+			   // the scene contains all the 3D object data
+			   scene = new THREE.Scene();
+
+			   // camera needs to go in the scene
+			   scene.add(camera);
+
+			   makeParticles();
+
+			   setInterval(update, 40);
+
+			   window.addEventListener("resize", onWindowResize, false);
+			}
+
+			function onWindowResize(event) {
+			   var container = document.getElementById("canvas");
+			   var w = container.offsetWidth;
+			   var h = container.offsetHeight;
+			   renderer.setSize(w, h);
+			   camera.aspect = w / h;
+			   camera.updateProjectionMatrix();
+			}
+
+			// the main update function, called 30 times a second
+
+			function update() {
+			   
+			   window.requestAnimationFrame(updateParticles);
+
+			   // and render the scene from the perspective of the camera
+			   renderer.render(scene, camera);
+			}
+
+			// creates a random field of Particle objects
+
+			function makeParticles() {
+			   
+			   var particle, material;
+			   var PI2 = Math.PI * 2;
+			   var particleCount = 210;
+
+			   // we're gonna move from z position -1000 (far away)
+			   // to 1000 (where the camera is) and add a random particle at every pos.
+			   for (var zpos = particleCount * -1; zpos < particleCount; zpos++) {
+			      // we make a particle material and pass through the
+			      // colour and custom particle render function we defined.
+			      material = new THREE.SpriteCanvasMaterial({
+			         color: Math.random() * 0xf5851f,
+			         program: function(context) {
+			            context.beginPath();
+			            context.arc(0, 0, .55, 0, PI2, true);
+			            context.fill();
+			         }
+			      });
+
+			      // make the particle
+			      particle = new THREE.Sprite(material);
+
+			      // give it a random x and y position between -500 and 500
+			      particle.position.x = Math.random() * 1000 - 500;
+			      particle.position.y = Math.random() * 1000 - 500;
+
+			      // set its z position
+			      particle.position.z = zpos;
+
+			      // scale it up a bit
+			      particle.scale.x = particle.scale.y = 12;
+
+			      // add it to the scene
+			      scene.add(particle);
+
+			      // and to the array of particles.
+			      particles.push(particle);
+			   }
+			}
+
+			function updateParticles() {
+			   
+			   // iterate through every particle
+			   for (var i = 0; i < particles.length; i++) {
+			      particle = particles[i];
+
+			      // and move it forward
+			      particle.position.z += 24 * 0.25;
+
+			      // Once the particle passes beyond
+			      // the viewport, move it back behind the logo
+			      if (particle.position.z > 1100)
+			         particle.position.z -= Math.random() * 1080;
+			   }
+			}
+				
+
+		
+
+		</script>
+	</body>
+</html>
