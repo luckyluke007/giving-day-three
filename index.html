@@ -16,7 +16,7 @@
 			}
 
 			#canvas {
-				background: #93c03e;
+				/*background-color: #93c03e;*/           
 				height: 100%;
 				margin: 0 auto;
 				max-height: 348px;
@@ -26,6 +26,8 @@
 			}
 
 			canvas {
+				/*background: #93c03e;*/
+        background-image: radial-gradient(#c8e494,#93c03e);
 				display: inline-block;
 				height: 348px;
 				max-width: 1080px;
@@ -52,7 +54,7 @@
 			</div>
 		</a>
 
-		<script src="js/three-90.js"></script>
+		<script src="js/three-v90.js"></script>
 		<script src="js/CanvasRenderer.js"></script>
 		<script src="js/Projector.js"></script>
 
@@ -73,7 +75,7 @@
 			      alpha: true
 			   });
 			   
-			   renderer.setClearColor(0x93c03e, 1);
+			   //renderer.setClearColor(0x93c03e, 1);
 			   var container = document.getElementById("canvas");
 			   var w = container.offsetWidth;
 			   var h = container.offsetHeight;
