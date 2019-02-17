@@ -64,7 +64,7 @@ canvas {
 function init(){
 
 	/* WEBGL RENDERER */
-	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('canvas'), alpha: true});
+	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('canvas'), alpha: true, antialias: true});
   var container = document.getElementById("canvas");
   var ww = container.offsetWidth;
 	var wh = container.offsetHeight;
@@ -131,7 +131,7 @@ function createParticle(){
   
   //Image texture
   var textureLoader = new THREE.TextureLoader();
-  var sprite = textureLoader.load( 'https://luckyluke007.github.io/giving-day-three/images/gd-dot.png');
+  var sprite = textureLoader.load( 'images/gd-dot-v2.png');
 	//We apply our vector inside the geometry
 	geometry.vertices.push(vertices);
 	//We create a white material
@@ -141,8 +141,8 @@ function createParticle(){
     size: Math.random() * 50,
     map: sprite,
     blending: THREE.AdditiveBlending,
-    depthTest: false
-    //transparent: true
+    depthTest: false,
+    transparent: true
     });
 
   
