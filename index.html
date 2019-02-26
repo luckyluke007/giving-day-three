@@ -7,7 +7,7 @@
 		<link href="//www.ucsc.edu/favicon.ico" rel="shortcut icon">
 
 		<style type="text/css">
-			body,html{width:100%;height:100%;padding:0;margin:0;}
+			body,html{width:100%;height:100%;padding:0;margin:0;font-family: helvetica;}
 
 .gd-container {
   background: #018699;
@@ -34,6 +34,24 @@
   z-index: 100;
 }
 
+.gd-container span {
+  background: #ffd200 url("https://www.ucsc.edu/features/giving-day/images/next.png") no-repeat 98% center;
+  background-size: 1em;
+  border-radius: 5px;
+  bottom: 10px;
+  color: #333;
+  display: inline-block;
+  font-weight: 700;
+  left: auto;
+  padding: 10px 25px 10px 10px;
+  position: absolute;
+  right: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  vertical-align: middle;
+  width: auto;
+}
+
 canvas {
   background: #018699;
   background-image: radial-gradient(#63d9ea,#018699);
@@ -42,8 +60,23 @@ canvas {
   height: 100% !important;
   max-width: 1080px !important;
   max-height: 348px !important;
-  position: absolute;
-  z-index: 1;
+}
+
+@media screen and (max-width: 37.5em) {
+  .gd-container span {
+    left: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .gd-container span {
+    left: auto;
+    bottom: 10px;
+    right: 10px;
+  }
 }
 
 </style>
@@ -51,21 +84,28 @@ canvas {
 	</head>
 	<body>
 		<!-- My scene -->
+<a href="https://givingday.ucsc.edu">
 <div class="gd-container">
-  <img src="https://www.ucsc.edu/images/giving-day/gd-logo.png" alt="2.28.18 Giving Day UC Santa Cruz">
+  <img src="https://www.ucsc.edu/images/giving-day/today-giving-day.png" alt="Today is Giving UC Santa Cruz Day">
+  <span>Make Your Gift Count</span>
   <canvas id="canvas"></canvas>
 </div>
+</a>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/101/three.min.js"></script>
 		<script>
-			var ww = window.innerWidth,
-	wh = window.innerHeight;
+			var container = document.getElementById("canvas");
+
+var ww = container.offsetWidth;
+var wh = container.offsetHeight;
+
+var colors = [0xda1f26,0xf5851f,0x503895,0xf2c264,0x93c03e,0xefe8e4,0x1eb473,0xd8df25,0xb99bc9,0x16a1dc,0x9d70af];
 
 function init(){
 
 	/* WEBGL RENDERER */
 	renderer = new THREE.WebGLRenderer({canvas : document.getElementById('canvas'), alpha: true, antialias: true});
-  var container = document.getElementById("canvas");
+  
   var ww = container.offsetWidth;
 	var wh = container.offsetHeight;
   //renderer.setClearColor(0x93c03e, 0);
@@ -124,32 +164,33 @@ function createParticle(){
 	var geometry = new THREE.Geometry();
 	//Create a vector which equal to the mouse position
 	var vertices = new THREE.Vector3(
-    mouse.x,
-		mouse.y,
-		-1
+   mouse.x,
+	 mouse.y,
+	 -1
 	);
   
   //Image texture
   var textureLoader = new THREE.TextureLoader();
-  var sprite = textureLoader.load( 'https://luckyluke007.github.io/giving-day-three/images/gd-dot.png');
+  var sprite = textureLoader.load( 'images/gd-dot-v2.png');
 	//We apply our vector inside the geometry
 	geometry.vertices.push(vertices);
 	//We create a white material
 	//sizeAttenuation defines if the particle will be small if far from the camera
   var material = new THREE.PointsMaterial({
-		color : Math.random() * 0xf5851f,
-    size: Math.random() * 35,
+		color: colors[Math.floor(Math.random()*colors.length)],
+    size: Math.floor(Math.random() * 14) + 8,
     map: sprite,
-    blending: THREE.AdditiveBlending,
-    depthTest: false
-    //transparent: true
+    blending: THREE.NormalBlending,
+    depthTest: false,
+    opacity: 2,
+    transparent: true
     });
 
   
   //Point cloud is a specific Mesh for particles
 	particle = new THREE.Points(geometry, material);
 	//We create a random speed for each particle for aesthetics
-	particle.speed = Math.random()/240+0.001;
+	particle.speed = Math.random()/60+0.001;
 	//We set a random position for each particle
 	particle.direction = {
 		x : (Math.random()-.5)*ww*1,
@@ -174,12 +215,12 @@ var animate = function () {
 		particle.geometry.vertices[0].x += (particle.direction.x - particle.geometry.vertices[0].x)*particle.speed;
 		particle.geometry.vertices[0].y += (particle.direction.y - particle.geometry.vertices[0].y)*particle.speed;
 		//We reduce the opacity of the particle
-		particle.material.opacity -= .005
+		particle.material.opacity -= .01
 		//Prevents ThreeJs the particle has moved
 		particle.geometry.verticesNeedUpdate = true;
 
 		//If the opacity of the particle is too low
-		if(particle.material.opacity < .005){
+		if(particle.material.opacity < .09){
 			//We remove our particle from the scene
 			particles.remove(particle);
 			//The loop must go through the same 'i' because we removed one particle from the array
